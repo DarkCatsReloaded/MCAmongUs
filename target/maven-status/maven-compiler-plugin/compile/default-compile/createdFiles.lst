@@ -1,0 +1,10 @@
+core\CommandHandler.class
+listeners\MagicEggListener$1.class
+core\CommandHandler$CommandContainer.class
+listeners\MagicGoldListener$1.class
+core\Plugin.class
+listeners\LookAtMyHorseListener.class
+commands\MCCommand.class
+listeners\LoveCreeperListener.class
+listeners\MagicEggListener.class
+listeners\MagicGoldListener.class
