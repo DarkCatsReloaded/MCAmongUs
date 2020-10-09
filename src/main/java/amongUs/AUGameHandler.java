@@ -32,6 +32,8 @@ public class AUGameHandler {
     }
 
     public void startGame() {
+        plugin.getTaskGenerator().generateCommonsTasks(gameSettings.commonTasks);
+
         //Implementing Progress bar
         if (progressBar != null)
             progressBar.removeAll();
@@ -54,7 +56,7 @@ public class AUGameHandler {
             player.player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, (int)((1 - gameSettings.playerSpeed ) * 2), false, false));
 
             if(player.playerType == AUPlayer.AmongUsPlayerType.Crewmate){
-                player.tasks = plugin.getTaskGenerator().generateTasks(gameSettings.shortTasks, gameSettings.commonTasks, gameSettings.longTasks);
+                player.tasks = plugin.getTaskGenerator().generateTasks(gameSettings.shortTasks, gameSettings.longTasks);
                 if((int)((1 - gameSettings.crewmateVision ) * 2) + 1 != 0)
                 player.player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, (int)((1 - gameSettings.crewmateVision ) * 2) + 1, false, false));
             } else if(player.playerType == AUPlayer.AmongUsPlayerType.Impostor){

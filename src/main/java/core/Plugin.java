@@ -3,6 +3,7 @@ package core;
 import amongUs.tasks.AuTaskGenerator;
 import commands.CmdAu;
 import listeners.CommandListener;
+import listeners.InventoryListener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,6 +16,7 @@ public class Plugin extends JavaPlugin {
 
     AuTaskGenerator taskGenerator = new AuTaskGenerator(this);
 
+    InventoryListener inventoryListener = new InventoryListener();
 
     @Override
     public void onEnable() {
@@ -39,7 +41,7 @@ public class Plugin extends JavaPlugin {
         try {
             commandHandler.handleCommand(commandHandler.commandParser(args, sender, command.getName(), command, this));
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             worked = false;
         }
 
@@ -70,11 +72,16 @@ public class Plugin extends JavaPlugin {
         return commandHandler;
     }
 
+    public InventoryListener getInventoryListener() {
+        return inventoryListener;
+    }
+
     private void addCommands(){
-        commandHandler.commands.put("au", new CmdAu());
+        commandHandler.commands.put("au", new CmdAu(this));
     }
 
     private void addListeners(){
         getServer().getPluginManager().registerEvents(new CommandListener(this), this);
+        getServer().getPluginManager().registerEvents(inventoryListener, this);
     }
 }

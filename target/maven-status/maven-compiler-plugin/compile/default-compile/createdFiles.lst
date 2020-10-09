@@ -4,9 +4,11 @@ listeners\MagicEggListener$1.class
 listeners\MagicGoldListener$1.class
 utils\FileUtils.class
 amongUs\AUPlayer.class
+commands\CmdAuSetupTask.class
 amongUs\AUGameHandler$1.class
 amongUs\tasks\AuTaskType.class
 commands\CmdAu.class
+listeners\InventoryListener.class
 core\CommandHandler$CommandContainer.class
 amongUs\AUGameHandler$AUGameSettings.class
 amongUs\tasks\AuTaskGenerator.class
@@ -14,11 +16,15 @@ listeners\LookAtMyHorseListener.class
 amongUs\AUGameHandler.class
 listeners\LoveCreeperListener.class
 amongUs\AUGameHandler$2.class
+amongUs\tasks\AUCableTask$1.class
+utils\SeperatedStep.class
 commands\CmdAuTask.class
 listeners\MagicGoldListener.class
 amongUs\AUPlayer$AmongUsPlayerType.class
 listeners\CommandListener.class
+amongUs\tasks\AUCableTask$2.class
 core\Plugin.class
 commands\MCCommand.class
 amongUs\tasks\AUTask.class
+amongUs\tasks\AUCableTask.class
 listeners\MagicEggListener.class

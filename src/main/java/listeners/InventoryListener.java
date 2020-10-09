@@ -1,9 +1,8 @@
 package listeners;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryPickupItemEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import utils.SeperatedStep;
 
 import java.util.HashMap;
@@ -11,16 +10,15 @@ import java.util.UUID;
 
 public class InventoryListener implements Listener {
 
-    HashMap<UUID, SeperatedStep> seperatedStepHashMap = new HashMap<>();
+    public HashMap<UUID, SeperatedStep> seperatedStepHashMap = new HashMap<>();
 
     @EventHandler
-    public void onItemNoms(InventoryPickupItemEvent event){
-        if(event.getInventory().getViewers().size() == 0){
-            UUID id = event.getInventory().getViewers().get(0).getUniqueId();
-            if(seperatedStepHashMap.containsKey(id)){
-                SeperatedStep step = seperatedStepHashMap.get(id);
-                step.runnable.run();
-            }
+    public void onItemNoms(InventoryClickEvent event) {
+        UUID id = event.getWhoClicked().getUniqueId();
+        if (seperatedStepHashMap.containsKey(id)) {
+            event.setCancelled(true);
+            SeperatedStep step = seperatedStepHashMap.get(id);
+            step.itemInventoryEvent(event.getCurrentItem());
         }
     }
 }
