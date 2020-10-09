@@ -6,5 +6,6 @@ core\Plugin.class
 listeners\LookAtMyHorseListener.class
 commands\MCCommand.class
 listeners\LoveCreeperListener.class
+listeners\MyThing.class
 listeners\MagicEggListener.class
 listeners\MagicGoldListener.class

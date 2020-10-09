@@ -14,6 +14,7 @@ import org.bukkit.util.Vector;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+
 public class MagicEggListener implements Listener {
 
     private Plugin plugin;

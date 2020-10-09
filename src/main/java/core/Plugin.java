@@ -1,9 +1,6 @@
 package core;
 
-import listeners.LookAtMyHorseListener;
-import listeners.LoveCreeperListener;
-import listeners.MagicEggListener;
-import listeners.MagicGoldListener;
+import listeners.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -63,5 +60,7 @@ public class Plugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new MagicGoldListener(this), this);
         getServer().getPluginManager().registerEvents(new LoveCreeperListener(), this);
         getServer().getPluginManager().registerEvents(new LookAtMyHorseListener(), this);
+        getServer().getPluginManager().registerEvents(new MyThing(), this);
+
     }
 }
