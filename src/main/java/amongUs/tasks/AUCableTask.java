@@ -101,6 +101,6 @@ public class AUCableTask implements AUTask{
     private ItemStack makeANewStack(Material m, String name){
         ItemStack s = new ItemStack(m);
         s.getItemMeta().setDisplayName(name);
-        return s
+        return s;
     }
 }
