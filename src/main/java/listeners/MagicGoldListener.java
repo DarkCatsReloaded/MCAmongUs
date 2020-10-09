@@ -7,7 +7,6 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityPlaceEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -21,6 +20,8 @@ public class MagicGoldListener implements Listener {
 
     @EventHandler
     public void onEntityPlace(BlockPlaceEvent event){
+        if(!event.getBlock().getType().equals(Material.GOLD_BLOCK))
+            return;
         Block b = event.getBlock();
         placeAround(b, 10);
 

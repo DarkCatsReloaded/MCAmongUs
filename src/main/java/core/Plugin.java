@@ -1,16 +1,20 @@
 package core;
 
-import listeners.LookAtMyHorseListener;
-import listeners.LoveCreeperListener;
-import listeners.MagicEggListener;
-import listeners.MagicGoldListener;
+import amongUs.tasks.AuTaskGenerator;
+import commands.CmdAu;
+import listeners.CommandListener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+import utils.FileUtils;
 
 public class Plugin extends JavaPlugin {
 
     CommandHandler commandHandler = new CommandHandler();
+    FileUtils fileUtils = new FileUtils();
+
+    AuTaskGenerator taskGenerator = new AuTaskGenerator(this);
+
 
     @Override
     public void onEnable() {
@@ -33,7 +37,7 @@ public class Plugin extends JavaPlugin {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         boolean worked = true;
         try {
-            commandHandler.handleCommand(commandHandler.commandParser(args, sender, label, command));
+            commandHandler.handleCommand(commandHandler.commandParser(args, sender, command.getName(), command, this));
         } catch (Exception e) {
             System.out.println(e);
             worked = false;
@@ -54,14 +58,23 @@ public class Plugin extends JavaPlugin {
         return true;
     }
 
-    private void addCommands(){
+    public FileUtils getFileUtils() {
+        return fileUtils;
+    }
 
+    public AuTaskGenerator getTaskGenerator() {
+        return taskGenerator;
+    }
+
+    public CommandHandler getCommandHandler() {
+        return commandHandler;
+    }
+
+    private void addCommands(){
+        commandHandler.commands.put("au", new CmdAu());
     }
 
     private void addListeners(){
-        getServer().getPluginManager().registerEvents(new MagicEggListener(this), this);
-        getServer().getPluginManager().registerEvents(new MagicGoldListener(this), this);
-        getServer().getPluginManager().registerEvents(new LoveCreeperListener(), this);
-        getServer().getPluginManager().registerEvents(new LookAtMyHorseListener(), this);
+        getServer().getPluginManager().registerEvents(new CommandListener(this), this);
     }
 }
