@@ -1,15 +1,14 @@
 package utils;
 
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public abstract class SeperatedStep {
 
-    public Player player;
+    public Player splayer;
 
     public SeperatedStep(Player player) {
-        this.player = player;
+        this.splayer = player;
     }
 
     public void itemInventoryEvent(ItemStack itemStack){}

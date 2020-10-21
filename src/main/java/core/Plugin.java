@@ -1,9 +1,14 @@
 package core;
 
-import amongUs.tasks.AuTaskGenerator;
+import amongUs.AUGameHandler;
+import amongUs.taskhandler.AuTaskGenerator;
 import commands.CmdAu;
+import commands.CmdAuSetupTask;
+import commands.CmdAuTask;
 import listeners.CommandListener;
+import listeners.HitListener;
 import listeners.InventoryListener;
+import listeners.SneakListener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,6 +22,8 @@ public class Plugin extends JavaPlugin {
     AuTaskGenerator taskGenerator = new AuTaskGenerator(this);
 
     InventoryListener inventoryListener = new InventoryListener();
+
+    CmdAu cmdAu = new CmdAu(this);
 
     @Override
     public void onEnable() {
@@ -77,11 +84,19 @@ public class Plugin extends JavaPlugin {
     }
 
     private void addCommands(){
-        commandHandler.commands.put("au", new CmdAu(this));
+        commandHandler.commands.put("au", cmdAu);
+        commandHandler.commands.put("autask", new CmdAuSetupTask());
+        commandHandler.commands.put("task", new CmdAuTask());
     }
 
     private void addListeners(){
         getServer().getPluginManager().registerEvents(new CommandListener(this), this);
         getServer().getPluginManager().registerEvents(inventoryListener, this);
+        getServer().getPluginManager().registerEvents(new SneakListener(this), this);
+        getServer().getPluginManager().registerEvents(new HitListener(this), this);
+    }
+
+    public AUGameHandler getGameHandler(){
+        return cmdAu.getGameHandler();
     }
 }

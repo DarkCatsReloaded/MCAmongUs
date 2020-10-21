@@ -1,4 +1,4 @@
-package amongUs.tasks;
+package amongUs.taskhandler;
 
 import java.io.Serializable;
 

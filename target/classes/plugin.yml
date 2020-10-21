@@ -12,3 +12,9 @@ commands:
   au:
     description: Among Us commands, type /au help for more information
     usage: "Usage: /<command> help"
+  task:
+    description: task command
+    usage: "Usage: /<command> help"
+  autask:
+    description: Setup tasks
+    usage: "Usage: /<command> help"

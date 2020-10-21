@@ -1,6 +1,6 @@
 package amongUs;
 
-import amongUs.tasks.AUTask;
+import amongUs.taskhandler.tasks.AUTask;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -13,9 +13,19 @@ public class AUPlayer {
     public boolean alive = true;
     public ArrayList<AUTask> tasks = new ArrayList<>();
     public int emergencyMeetings;
+    public int killCooldown = 0;
+    public Location killLocation;
 
-    public void kill(Location location){
-        //TODO: corpse on the ground
+    public void kill(Location location) {
+        killLocation = location;
+        alive = false;
+    }
+
+    public void resetKillCooldown(AUGameHandler gameHandler, boolean startOfGame) {
+        if (startOfGame)
+            killCooldown = gameHandler.getGameSettings().killCooldown / 2;
+        else
+            killCooldown = gameHandler.getGameSettings().killCooldown;
     }
 
     public AUPlayer(Player player) {

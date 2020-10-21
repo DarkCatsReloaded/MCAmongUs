@@ -1,15 +1,22 @@
 package commands;
 
-import amongUs.AUPlayer;
-import amongUs.tasks.AUCableTask;
+import amongUs.AUGameHandler;
 import core.Plugin;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.util.EulerAngle;
 
-public class CmdAu implements MCCommand{
+public class CmdAu implements MCCommand {
 
     private Plugin plugin;
+    private AUGameHandler gameHandler;
 
     public CmdAu(Plugin plugin) {
         this.plugin = plugin;
@@ -22,23 +29,60 @@ public class CmdAu implements MCCommand{
 
     @Override
     public void actionPlayer(String[] args, CommandSender sender, Command command, Plugin plugin) {
-        if(args.length > 0){
-            switch (args[0]){
-                case "start":
-                    System.out.println("start yhsdkasflhfelhrohsdahsdlhasdheglhehasdjhaskf");
-                    //todo: start logic
+        if (args.length > 0) {
+            switch (args[0]) {
+                case "create":
+                    gameHandler = new AUGameHandler(plugin);
+                    gameHandler.addPlayerToGame((Player) sender);
+                    sender.sendMessage("§2Das Spiel wurde erstellt und du wurdest hinzugefügt!");
+                    break;
+
+                case "start": {
+                    if (gameHandler == null) {
+                        sender.sendMessage("§4Es wurde noch kein Spiel erstellt!");
+                        return;
+                    }
+
+                    gameHandler.startGame();
+                }
+                break;
+
+                case "add":
+                    if (gameHandler == null) {
+                        sender.sendMessage("§4Es wurde noch kein Spiel erstellt! Es wird nun eines erstellt!");
+                        gameHandler = new AUGameHandler(plugin);
+                        sender.sendMessage("§2Das Spiel wurde erstellt und du wurdest hinzugefügt!");
+                    }
+                    if (args.length > 1) {
+                        Player player = Bukkit.getServer().getPlayer(args[1]);
+                        if (player == null) {
+                            sender.sendMessage("§4Der Spieler wurde nicht gefunden");
+                            return;
+                        }
+
+                        if (gameHandler.containtsPlayer(player)) {
+                            sender.sendMessage("§4Der Spieler ist bereits im Spiel!");
+                            return;
+                        }
+
+                        gameHandler.addPlayerToGame(player);
+                        sender.sendMessage("§2Spieler hinzugefügt!");
+                    } else {
+                        sender.sendMessage("§4Der Spieler wurde nicht gefunden");
+                    }
                     break;
 
                 case "test":
-                    AUCableTask task = new AUCableTask();
-                    AUPlayer p = new AUPlayer((Player) sender);
-                    task.setupTask((Player) sender, plugin);
-                    task.gameStart(plugin, p, null);
-                    task.playerPerformTask(p,null,plugin);
+                    Player s = (Player) sender;
                     break;
 
                 case "stop":
-                    //todo: stop logic
+                    if (gameHandler == null) {
+                        sender.sendMessage("§4Es wurde noch kein Spiel erstellt!");
+                        return;
+                    }
+                    gameHandler.abortGame();
+                    gameHandler = null;
                     break;
             }
         }
@@ -58,5 +102,9 @@ public class CmdAu implements MCCommand{
     public String help() {
         return "start - starts the game\n" +
                 "stop - stops the game";
+    }
+
+    public AUGameHandler getGameHandler() {
+        return gameHandler;
     }
 }

@@ -1,5 +1,6 @@
 package amongUs;
 
+import amongUs.taskhandler.tasks.AUTask;
 import core.Plugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -11,6 +12,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class AUGameHandler {
@@ -34,6 +36,12 @@ public class AUGameHandler {
     public void startGame() {
         plugin.getTaskGenerator().generateCommonsTasks(gameSettings.commonTasks);
 
+        //Verteile Impostor Rollen
+        ArrayList<Integer> impsIds = getRandomMember(gameSettings.numberOfImposters);
+        for (int i : impsIds) {
+            players.get(i).playerType = AUPlayer.AmongUsPlayerType.Impostor;
+        }
+
         //Implementing Progress bar
         if (progressBar != null)
             progressBar.removeAll();
@@ -41,37 +49,46 @@ public class AUGameHandler {
         progressBar.setProgress(0);
         progressBar.setVisible(true);
 
-        //Verteile Impostor Rollen
-        ArrayList<Integer> impsIds = getRandomMember(gameSettings.numberOfImposters);
-        for (int i:impsIds) {
-            players.get(i).playerType = AUPlayer.AmongUsPlayerType.Impostor;
-        }
-
-
         for (AUPlayer player : players) {
-            progressBar.addPlayer(player.player);
+            try {
+                progressBar.addPlayer(player.player);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             player.emergencyMeetings = gameSettings.numberOfEmergencyMeetings;
 
-            if((int)((1 - gameSettings.playerSpeed )*2) != 0)
-            player.player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, (int)((1 - gameSettings.playerSpeed ) * 2), false, false));
+            if ((int) ((1 - gameSettings.playerSpeed) * 2) != 0)
+                player.player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, (int) ((1 - gameSettings.playerSpeed) * 2), false, false));
 
-            if(player.playerType == AUPlayer.AmongUsPlayerType.Crewmate){
+            if (player.playerType == AUPlayer.AmongUsPlayerType.Crewmate) {
                 player.tasks = plugin.getTaskGenerator().generateTasks(gameSettings.shortTasks, gameSettings.longTasks);
-                if((int)((1 - gameSettings.crewmateVision ) * 2) + 1 != 0)
-                player.player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, (int)((1 - gameSettings.crewmateVision ) * 2) + 1, false, false));
-            } else if(player.playerType == AUPlayer.AmongUsPlayerType.Impostor){
-                if((int)((1 - gameSettings.imposterVision ) * 2) + 1 != 0)
-                player.player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, (int)((1 - gameSettings.imposterVision ) * 2) + 1, false, false));
+                if ((int) ((1 - gameSettings.crewmateVision) * 2) + 1 != 0)
+                    player.player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, (int) ((1 - gameSettings.crewmateVision) * 2) + 1, false, false));
+            } else if (player.playerType == AUPlayer.AmongUsPlayerType.Impostor) {
+                if ((int) ((1 - gameSettings.imposterVision) * 2) + 1 != 0)
+                    player.player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, (int) ((1 - gameSettings.imposterVision) * 2) + 1, false, false));
             }
         }
 
         double tasks = 0;
         for (AUPlayer player : players) {
-            tasks+=player.tasks.size();
+            tasks += player.tasks.size();
         }
-        progressRiser = tasks / 100;
+        progressRiser = 1 / tasks;
 
         sendStartMessages();
+
+        final AUGameHandler handler = this;
+        Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+            @Override
+            public void run() {
+                for (AUPlayer p : players) {
+                    for (AUTask t : p.tasks) {
+                        t.gameStart(plugin, p, handler);
+                    }
+                }
+            }
+        }, 10 * 10);
         //todo: startGame logic
     }
 
@@ -102,6 +119,13 @@ public class AUGameHandler {
     }
 
     public void abortGame() {
+        progressBar.setVisible(false);
+        progressBar.removeAll();
+        for (AUPlayer p : players) {
+            for (AUTask t : p.tasks) {
+                t.abort(p, this, plugin);
+            }
+        }
         //todo: abortGame logic
     }
 
@@ -119,15 +143,18 @@ public class AUGameHandler {
 
     public void playerDoneWithTask() {
         progress += progressRiser;
-        progressBar.setProgress(progress);
+        if (progress > 1)
+            progressBar.setProgress(1);
+        else
+            progressBar.setProgress(progress);
     }
 
-    private ArrayList<Integer> getRandomMember(int imposters){
+    private ArrayList<Integer> getRandomMember(int imposters) {
         ArrayList<Integer> re = new ArrayList<>();
         for (int i = 0; i < imposters; i++) {
-            int a = ThreadLocalRandom.current().nextInt(0,players.size()-1);
-            while(re.contains(a))
-                a = ThreadLocalRandom.current().nextInt(0,players.size()-1);
+            int a = ThreadLocalRandom.current().nextInt(0, players.size() - 1);
+            while (re.contains(a) && re.size() != 0)
+                a = ThreadLocalRandom.current().nextInt(0, players.size() - 1);
 
             re.add(a);
         }
@@ -138,7 +165,34 @@ public class AUGameHandler {
         players.add(new AUPlayer(player));
     }
 
-    private class AUGameSettings {
+    public boolean containtsPlayer(Player player) {
+        for (AUPlayer pl : players) {
+            if (pl.player.getUniqueId().equals(player.getUniqueId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public ArrayList<AUPlayer> getPlayers() {
+        return players;
+    }
+
+    public AUPlayer getPlayerById(UUID id) {
+        for (AUPlayer pl : players) {
+            if (pl.player.getUniqueId().equals(id)) {
+                return pl;
+            }
+        }
+        return null;
+    }
+
+    public AUGameSettings getGameSettings() {
+        return gameSettings;
+    }
+
+    public class AUGameSettings {
+        public int killCooldown = 30;
         public int numberOfImposters = 1;
         public boolean confirmEjects = true;
         public int numberOfEmergencyMeetings = 1;
@@ -149,7 +203,7 @@ public class AUGameHandler {
         public double crewmateVision = 1;
         public double imposterVision = 1.5;
         public int commonTasks = 2;
-        public int longTasks = 3;
+        public int longTasks = 1;
         public int shortTasks = 5;
     }
 }

@@ -1,6 +1,9 @@
-package amongUs.tasks;
+package amongUs.taskhandler;
 
+import amongUs.taskhandler.tasks.AUTask;
 import core.Plugin;
+import org.bukkit.entity.Player;
+import utils.Utils;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -58,5 +61,29 @@ public class AuTaskGenerator {
                 ts.add(tt);
         }
         return ts;
+    }
+
+    public void addAvailableTask(AUTask task, boolean justTest) throws Exception {
+        for (AUTask t:tasksAvailable) {
+            if(t.getLocation().world.equals(task.getLocation().world)){
+                if(Utils.isNear(task.getLocation(), t.getLocation(), 6)){
+                    throw new Exception("To near");
+                }
+            }
+        }
+        if(!justTest)
+        tasksAvailable.add(task);
+    }
+
+    public boolean removeAvailableTask(Player player){
+        for (AUTask t:tasksAvailable) {
+            if(t.getLocation().world.equals(player.getLocation().getWorld().getUID())){
+                if(t.getLocation().x == player.getLocation().getX() && t.getLocation().y == player.getLocation().getY() && t.getLocation().z == player.getLocation().getZ()){
+                    tasksAvailable.remove(t);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

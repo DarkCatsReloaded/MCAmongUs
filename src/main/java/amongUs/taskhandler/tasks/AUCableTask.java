@@ -1,24 +1,28 @@
-package amongUs.tasks;
+package amongUs.taskhandler.tasks;
 
 import amongUs.AUGameHandler;
 import amongUs.AUPlayer;
+import amongUs.taskhandler.AuTaskAnimationHandler;
+import amongUs.taskhandler.AuTaskType;
 import core.Plugin;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitTask;
 import utils.SeperatedStep;
 import utils.SeriLocation;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class AUCableTask implements AUTask {
 
     private SeriLocation location;
-    public AuTaskType taskType = AuTaskType.CommonTask;
+    public transient AuTaskType taskType = AuTaskType.CommonTask;
+    public transient HashMap<UUID, AuTaskAnimationHandler> anis = new HashMap<>();
 
     @Override
     public SeriLocation getLocation() {
@@ -36,7 +40,7 @@ public class AUCableTask implements AUTask {
     }
 
     @Override
-    public void playerPerformTask(AUPlayer player, AUGameHandler gameHandler, final Plugin plugin) {
+    public void playerPerformTask(final AUPlayer player, final AUGameHandler gameHandler, final Plugin plugin) {
         final Inventory inv = Bukkit.createInventory(null, 9 * 4, "Fix Cables");
         Material type;
         ArrayList<ItemStack> itsL = getCableWool("cable");
@@ -47,13 +51,14 @@ public class AUCableTask implements AUTask {
             inv.setItem(invLocation(i + 1, 9), itsR.get(i));
         }
 
+        final AUTask task = this;
         SeperatedStep step = new SeperatedStep(player.player) {
             ItemStack selected = null;
             int done = 0;
 
             @Override
             public void reopen() {
-                player.openInventory(inv);
+                splayer.openInventory(inv);
             }
 
             @Override
@@ -62,8 +67,8 @@ public class AUCableTask implements AUTask {
                     return;
 
                 if (done >= 4) {
-                    plugin.getInventoryListener().seperatedStepHashMap.remove(player.getUniqueId());
-                    player.closeInventory();
+                    plugin.getInventoryListener().seperatedStepHashMap.remove(splayer.getUniqueId());
+                    splayer.closeInventory();
                     inv.clear();
                 }
                 if (itemStack.getType().equals(Material.LIME_CONCRETE))
@@ -84,12 +89,15 @@ public class AUCableTask implements AUTask {
                     if (itemStack.getItemMeta().getDisplayName().startsWith(it)) {
                         selected.setType(Material.LIME_CONCRETE);
                         itemStack.setType(Material.LIME_CONCRETE);
-                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 50, 5);
+                        splayer.playSound(splayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 50, 5);
                         done++;
                         if (done == 4) {
-                            plugin.getInventoryListener().seperatedStepHashMap.remove(player.getUniqueId());
-                            player.closeInventory();
+                            plugin.getInventoryListener().seperatedStepHashMap.remove(splayer.getUniqueId());
+                            splayer.closeInventory();
+                            player.tasks.remove(task);
                             inv.clear();
+                            anis.get(splayer.getUniqueId()).stopAnimation();
+                            gameHandler.playerDoneWithTask();
                         }
                     }
                 }
@@ -108,31 +116,17 @@ public class AUCableTask implements AUTask {
 
     @Override
     public void gameStart(final Plugin plugin, final AUPlayer player, AUGameHandler gameHandler) {
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
-            double x;
-            double y;
-            double z;
-            double angle = -1;
-
-            @Override
-            public void run() {
-                double[] c = circle(getLocation().x + 0.5, getLocation().y + 0.4, getLocation().z-0.5, angle);
-                x = c[0];
-                y = c[1];
-                z = c[2];
-                angle = c[3];
-
-                player.player.spawnParticle(Particle.VILLAGER_HAPPY, new Location(player.player.getWorld(), x,y,z), 5, 0,0,0);
-            }
-        }, 0, 1);
+        anis.put(player.player.getUniqueId(), new AuTaskAnimationHandler(getLocation().turnIntoLocation(plugin), player.player));
+        anis.get(player.player.getUniqueId()).startAnimation(plugin);
     }
 
-    private double[] circle(double x, double y, double z, double angle){
-        angle+= 0.1;
-        double nx = x + Math.cos(angle);
-        double nz = z + Math.sin(angle);
+    @Override
+    public void abort(AUPlayer player, AUGameHandler gameHandler, Plugin plugin) {
+        anis.get(player.player.getUniqueId()).stopAnimation();
+    }
 
-        return new double[]{nx, y, nz, angle};
+    @Override
+    public void activateNextTask(AUPlayer player, AUGameHandler gameHandler, Plugin plugin) {
     }
 
     private int invLocation(int zeile, int spalte) {
