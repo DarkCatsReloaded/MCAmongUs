@@ -4,6 +4,8 @@ import core.Plugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import java.util.List;
+
 public interface MCCommand {
 
     boolean calledPlayer(String[] args, CommandSender sender, Command command, Plugin plugin);
@@ -11,4 +13,5 @@ public interface MCCommand {
     void actionServer(String[] args, CommandSender sender, Command command, Plugin plugin);
     boolean isShownInConsole();
     String help();
+    List<String> tabComplete(String[] args);
 }

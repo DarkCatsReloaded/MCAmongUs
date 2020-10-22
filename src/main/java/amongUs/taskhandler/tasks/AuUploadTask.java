@@ -19,7 +19,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class AuUploadTask implements AUTask{
 
     private SeriLocation location;
-    public transient AuTaskType taskType = AuTaskType.LongTask;
+    private String name;
+    private AuTaskType taskType = AuTaskType.LongTask;
     public transient HashMap<UUID, AuTaskAnimationHandler> anis = new HashMap<>();
 
     @Override
@@ -98,8 +99,9 @@ public class AuUploadTask implements AUTask{
     }
 
     @Override
-    public void setupTask(Player player, Plugin plugin) {
-        location = new SeriLocation(player.getLocation());
+    public void setupTask(SeriLocation loc, String name) {
+        location = loc;
+        this.name = name;
     }
 
     @Override
@@ -117,6 +119,11 @@ public class AuUploadTask implements AUTask{
     public void activateNextTask(AUPlayer player, AUGameHandler gameHandler, Plugin plugin) {
         anis.put(player.player.getUniqueId(), new AuTaskAnimationHandler(getLocation().turnIntoLocation(plugin), player.player));
         anis.get(player.player.getUniqueId()).startAnimation(plugin);
+    }
+
+    @Override
+    public String getTaskName() {
+        return name;
     }
 
     private int invLocation(int spalte, int zeile) {

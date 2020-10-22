@@ -16,8 +16,9 @@ public interface AUTask extends Serializable {
     public AuTaskType getTaskType();
     public AUTask getNextTask();
     public void playerPerformTask(AUPlayer player, AUGameHandler gameHandler, Plugin plugin);
-    public void setupTask(Player player, Plugin plugin);
+    public void setupTask(SeriLocation location, String name);
     public void gameStart(Plugin plugin, AUPlayer player, AUGameHandler gameHandler);
     public void abort(AUPlayer player, AUGameHandler gameHandler, Plugin plugin);
     public void activateNextTask(AUPlayer player, AUGameHandler gameHandler, Plugin plugin);
+    public String getTaskName();
 }

@@ -74,6 +74,7 @@ public class AUGameHandler {
         for (AUPlayer player : players) {
             tasks += player.tasks.size();
         }
+        System.out.println("There are " + tasks + " tasks to do!");
         progressRiser = 1 / tasks;
 
         sendStartMessages();

@@ -20,6 +20,7 @@ amongUs\taskhandler\tasks\AuDownloadTask$1.class
 amongUs\taskhandler\tasks\AuUploadTask$1$1$1$1$1$1$1.class
 amongUs\AUGameHandler.class
 amongUs\taskhandler\tasks\AuUploadTask$1$1$1$1.class
+commands\TabComplete.class
 listeners\HitListener.class
 amongUs\taskhandler\tasks\AUCableTask.class
 amongUs\AUGameHandler$2.class
@@ -31,7 +32,6 @@ amongUs\taskhandler\tasks\AUTask.class
 listeners\SneakListener.class
 amongUs\taskhandler\tasks\AuDownloadTask$1$1$1$1$1.class
 utils\SeperatedStep.class
-commands\CmdAuTask.class
 amongUs\taskhandler\tasks\AuUploadTask.class
 amongUs\AUPlayer$AmongUsPlayerType.class
 amongUs\taskhandler\AuTaskType.class

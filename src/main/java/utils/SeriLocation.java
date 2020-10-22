@@ -22,6 +22,13 @@ public class SeriLocation implements Serializable {
         world = location.getWorld().getUID();
     }
 
+    public SeriLocation(int x, int y, int z, UUID world) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.world = world;
+    }
+
     public Location turnIntoLocation(Plugin plugin) {
         try {
             return plugin.getServer().getWorld(world).getBlockAt(x, y, z).getLocation();
@@ -29,5 +36,10 @@ public class SeriLocation implements Serializable {
             System.out.println("Error on converting SeriLocation in Location!");
             return null;
         }
+    }
+
+    @Override
+    public String toString() {
+        return x + " " + y + " " + z + " " + world;
     }
 }

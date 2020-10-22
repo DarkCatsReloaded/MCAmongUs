@@ -25,4 +25,16 @@ public class Utils {
         }
         return false;
     }
+
+    public static boolean containsAny(String s1, String comp){
+        boolean match = true;
+        for (int i = 0; i < comp.length(); i++) {
+            if(s1.length() -1 < i){
+                return false;
+            }
+            if(comp.toCharArray()[i] != s1.toCharArray()[i])
+                match = false;
+        }
+        return match;
+    }
 }

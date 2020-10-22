@@ -21,7 +21,8 @@ import java.util.UUID;
 public class AUCableTask implements AUTask {
 
     private SeriLocation location;
-    public transient AuTaskType taskType = AuTaskType.CommonTask;
+    private String name;
+    public AuTaskType taskType = AuTaskType.CommonTask;
     public transient HashMap<UUID, AuTaskAnimationHandler> anis = new HashMap<>();
 
     @Override
@@ -110,8 +111,9 @@ public class AUCableTask implements AUTask {
     }
 
     @Override
-    public void setupTask(Player player, Plugin plugin) {
-        location = new SeriLocation(player.getLocation());
+    public void setupTask(SeriLocation loc, String name) {
+        location = loc;
+        this.name = name;
     }
 
     @Override
@@ -127,6 +129,11 @@ public class AUCableTask implements AUTask {
 
     @Override
     public void activateNextTask(AUPlayer player, AUGameHandler gameHandler, Plugin plugin) {
+    }
+
+    @Override
+    public String getTaskName() {
+        return name;
     }
 
     private int invLocation(int zeile, int spalte) {

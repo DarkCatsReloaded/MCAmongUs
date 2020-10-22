@@ -3,23 +3,27 @@ package commands;
 import amongUs.AUGameHandler;
 import core.Plugin;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.util.EulerAngle;
+
+import java.util.List;
 
 public class CmdAu implements MCCommand {
 
     private Plugin plugin;
     private AUGameHandler gameHandler;
+    private transient TabComplete tp;
 
     public CmdAu(Plugin plugin) {
         this.plugin = plugin;
+
+        tp = new TabComplete();
+        tp.createTabComplete("create");
+        tp.createTabComplete("start");
+        tp.createTabComplete("add");
+        tp.createTabComplete("stop");
+        tp.crateFurtherTabComplete("add", "", true);
     }
 
     @Override
@@ -102,6 +106,11 @@ public class CmdAu implements MCCommand {
     public String help() {
         return "start - starts the game\n" +
                 "stop - stops the game";
+    }
+
+    @Override
+    public List<String> tabComplete(String[] args) {
+        return tp.comp(args);
     }
 
     public AUGameHandler getGameHandler() {

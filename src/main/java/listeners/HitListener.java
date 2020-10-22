@@ -10,6 +10,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -24,15 +25,15 @@ public class HitListener implements Listener {
     }
 
     @EventHandler
-    public void onHit(EntityDamageByEntityEvent event){
+    public void onHit(PlayerInteractEntityEvent event){
         if(plugin.getGameHandler() == null)
             return;
         Player player = null;
         Player hit = null;
 
         try {
-            player = (Player) event.getDamager();
-            hit = (Player) event.getEntity();
+            player = (Player) event.getPlayer();
+            hit = (Player) event.getRightClicked();
         } catch (Exception e){
         }
 
