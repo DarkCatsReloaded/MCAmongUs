@@ -2,7 +2,6 @@ core\CommandHandler.class
 utils\SeriLocation.class
 amongUs\taskhandler\tasks\AuUploadTask$1$1$1$1$1.class
 amongUs\taskhandler\AuTaskAnimationHandler$1.class
-amongUs\AUGameHandler$3.class
 amongUs\taskhandler\tasks\AuDownloadTask$1$1$1$1.class
 utils\FileUtils.class
 amongUs\AUPlayer.class
@@ -12,6 +11,7 @@ amongUs\AUGameHandler$1.class
 amongUs\taskhandler\tasks\AuUploadTask$1$1$1.class
 commands\CmdAu.class
 listeners\InventoryListener.class
+amongUs\AUPlayer$1.class
 amongUs\taskhandler\tasks\AuDownloadTask$1$1.class
 amongUs\taskhandler\AuTaskAnimationHandler.class
 core\CommandHandler$CommandContainer.class

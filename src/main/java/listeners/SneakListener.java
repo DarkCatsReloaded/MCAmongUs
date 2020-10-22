@@ -29,10 +29,13 @@ public class SneakListener implements Listener {
             for (AUPlayer p:plugin.getGameHandler().getPlayers()) {
                 if(event.getPlayer().getUniqueId().equals(p.player.getUniqueId())){
                     for (AUTask t:p.tasks) {
-                        if(t.getLocation().world.equals(location.getWorld().getUID())){
-                            if(Utils.isNear(t.getLocation().turnIntoLocation(plugin), p.player.getLocation(), 4)){
-                                t.playerPerformTask(p,plugin.getGameHandler(),plugin);
+                        try {
+                            if(t.getLocation().world.equals(location.getWorld().getUID())){
+                                if(Utils.isNear(t.getLocation().turnIntoLocation(plugin), p.player.getLocation(), 4)){
+                                    t.playerPerformTask(p,plugin.getGameHandler(),plugin);
+                                }
                             }
+                        } catch (Exception e){
                         }
                     }
                 }

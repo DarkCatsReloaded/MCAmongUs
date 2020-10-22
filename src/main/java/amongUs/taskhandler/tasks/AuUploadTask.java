@@ -41,6 +41,7 @@ public class AuUploadTask implements AUTask{
     @Override
     public void playerPerformTask(final AUPlayer player, final AUGameHandler gameHandler, final Plugin plugin) {
         final Inventory inv = Bukkit.createInventory(null, 9 * 3, "Upload");
+        final AUTask task = this;
         plugin.getInventoryListener().unremovableItemsInventory.put(player.player.getUniqueId(), inv);
         player.player.openInventory(inv);
         //1
@@ -80,6 +81,7 @@ public class AuUploadTask implements AUTask{
                                                                 plugin.getInventoryListener().unremovableItemsInventory.remove(player.player.getUniqueId());
                                                                 inv.clear();
                                                                 player.player.closeInventory();
+                                                                player.tasksDone(task);
                                                                 gameHandler.playerDoneWithTask();
                                                                 anis.get(player.player.getUniqueId()).stopAnimation();
                                                             }
@@ -99,10 +101,11 @@ public class AuUploadTask implements AUTask{
     }
 
     @Override
-    public void setupTask(SeriLocation loc, String name) {
-        location = loc;
+    public void setupTask(SeriLocation location, String name) {
         this.name = name;
+        this.location = location;
     }
+
 
     @Override
     public void gameStart(Plugin plugin, AUPlayer player, AUGameHandler gameHandler) {

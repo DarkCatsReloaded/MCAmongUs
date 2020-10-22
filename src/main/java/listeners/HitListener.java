@@ -47,15 +47,15 @@ public class HitListener implements Listener {
 
         event.setCancelled(true);
         if(auP.playerType == AUPlayer.AmongUsPlayerType.Impostor){
-            hit.setGameMode(GameMode.SPECTATOR);
-            auP.resetKillCooldown(plugin.getGameHandler(), false);
-            auCorpse.kill(hit.getLocation());
-            makeCorps(hit);
+            if(auCorpse.playerType == AUPlayer.AmongUsPlayerType.Crewmate){
+                if(auP.killCooldown == 0){
+                    auCorpse.kill(hit.getLocation(), auP, plugin);
+                    makeCorps(hit);
+                } else {
+                    auP.player.sendMessage("§4You have to wait " + auP.killCooldown + " until you can kill another player!");
+                }
+            }
         }
-    }
-
-    private void sendDeathMessage(Player corspe){
-
     }
 
     private void makeCorps(Player corpse){

@@ -3,6 +3,7 @@ package amongUs;
 import amongUs.taskhandler.tasks.AUTask;
 import core.Plugin;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -10,6 +11,8 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -29,11 +32,17 @@ public class AUGameHandler {
     private Location startLocation;
     private Location emergencyRoomLocation;
 
+    public Scoreboard killerScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+    public Team impostors;
+
     public AUGameHandler(Plugin plugin) {
         this.plugin = plugin;
     }
 
     public void startGame() {
+        impostors = killerScoreboard.registerNewTeam("Impostors");
+        impostors.setColor(ChatColor.DARK_RED);
+        impostors.setPrefix("Impostor");
         plugin.getTaskGenerator().generateCommonsTasks(gameSettings.commonTasks);
 
         //Verteile Impostor Rollen
@@ -62,12 +71,9 @@ public class AUGameHandler {
 
             if (player.playerType == AUPlayer.AmongUsPlayerType.Crewmate) {
                 player.tasks = plugin.getTaskGenerator().generateTasks(gameSettings.shortTasks, gameSettings.longTasks);
-                if ((int) ((1 - gameSettings.crewmateVision) * 2) + 1 != 0)
-                    player.player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, (int) ((1 - gameSettings.crewmateVision) * 2) + 1, false, false));
-            } else if (player.playerType == AUPlayer.AmongUsPlayerType.Impostor) {
-                if ((int) ((1 - gameSettings.imposterVision) * 2) + 1 != 0)
-                    player.player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, (int) ((1 - gameSettings.imposterVision) * 2) + 1, false, false));
             }
+
+            player.gameStart(this);
         }
 
         double tasks = 0;
@@ -78,19 +84,11 @@ public class AUGameHandler {
         progressRiser = 1 / tasks;
 
         sendStartMessages();
-
-        final AUGameHandler handler = this;
-        Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-            @Override
-            public void run() {
-                for (AUPlayer p : players) {
-                    for (AUTask t : p.tasks) {
-                        t.gameStart(plugin, p, handler);
-                    }
-                }
+        for (AUPlayer p : players) {
+            for (AUTask t : p.tasks) {
+                t.gameStart(plugin, p, this);
             }
-        }, 10 * 10);
-        //todo: startGame logic
+        }
     }
 
     private void sendStartMessages() {
@@ -120,9 +118,11 @@ public class AUGameHandler {
     }
 
     public void abortGame() {
+        impostors.unregister();
         progressBar.setVisible(false);
         progressBar.removeAll();
         for (AUPlayer p : players) {
+            p.gameStop();
             for (AUTask t : p.tasks) {
                 t.abort(p, this, plugin);
             }
@@ -194,7 +194,7 @@ public class AUGameHandler {
 
     public class AUGameSettings {
         public int killCooldown = 30;
-        public int numberOfImposters = 1;
+        public int numberOfImposters = 2;
         public boolean confirmEjects = true;
         public int numberOfEmergencyMeetings = 1;
         public int emergencyCooldown = 30;

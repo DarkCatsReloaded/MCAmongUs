@@ -44,6 +44,7 @@ public class AuDownloadTask implements AUTask {
         final Inventory inv = Bukkit.createInventory(null, 9 * 3, "Download");
         plugin.getInventoryListener().unremovableItemsInventory.put(player.player.getUniqueId(), inv);
         player.player.openInventory(inv);
+        final AUTask task = this;
         //1
         Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
             @Override
@@ -78,7 +79,8 @@ public class AuDownloadTask implements AUTask {
                                                         Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
                                                             @Override
                                                             public void run() {
-                                                                player.tasks.add(nextTask);
+                                                                player.addTask(nextTask);
+                                                                player.tasksDone(task);
                                                                 nextTask.activateNextTask(player, gameHandler, plugin);
                                                                 plugin.getInventoryListener().unremovableItemsInventory.remove(player.player.getUniqueId());
                                                                 inv.clear();

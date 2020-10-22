@@ -33,7 +33,7 @@ public class AuTaskGenerator {
             tasksAvailable = new ArrayList<>();
             System.out.println("Can't load tasks, maybe never created!");
         }
-        if(tasksAvailable == null){
+        if (tasksAvailable == null) {
             tasksAvailable = new ArrayList<>();
             System.out.println("Can't load tasks, maybe never created!");
         }
@@ -97,7 +97,7 @@ public class AuTaskGenerator {
         return false;
     }
 
-    public void loadTasks() throws Exception{
+    public void loadTasks() throws Exception {
         tasksAvailable = new ArrayList<>();
         JSONObject o = plugin.getFileUtils().loadJsonFile(plugin.getFileUtils().home + path);
         JSONArray array = (JSONArray) o.get("arr");
@@ -107,21 +107,32 @@ public class AuTaskGenerator {
         }
     }
 
-    public void saveTasks(){
+    public void saveTasks() {
         JSONObject object = new JSONObject();
         JSONArray arr = new JSONArray();
         object.put("arr", arr);
-        for (AUTask t:tasksAvailable) {
+        for (AUTask t : tasksAvailable) {
+            JSONObject task = null;
             try {
-                arr.add(castTaskToJson(t));
+                task = castTaskToJson(t);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            if(t.getNextTask() != null){
+                JSONObject nextTask = null;
+                try {
+                    nextTask = castTaskToJson(t.getNextTask());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                task.put("next", nextTask);
+            }
+            arr.add(task);
         }
         plugin.getFileUtils().saveJsonFile(plugin.getFileUtils().home + path, object);
     }
 
-    public AUTask castJsonToTask(JSONObject o) throws Exception{
+    public AUTask castJsonToTask(JSONObject o) throws Exception {
         String sw = (String) o.get("taskt");
         AUTask task;
         switch (sw) {
@@ -141,16 +152,21 @@ public class AuTaskGenerator {
                 throw new Exception("Cant cast");
         }
         task.setupTask(castJsonToLocation((JSONObject) o.get("loc")), (String) o.get("name"));
+        if (o.containsKey("next")) {
+            JSONObject next = (JSONObject) o.get("next");
+            AUTask nextTask = castJsonToTask(next);
+            task.getNextTask().setupTask(nextTask.getLocation(), nextTask.getTaskName());
+        }
         return task;
     }
 
-    public JSONObject castTaskToJson(AUTask task) throws Exception{
+    public JSONObject castTaskToJson(AUTask task) throws Exception {
         String taskt;
-        if(task instanceof AUCableTask){
+        if (task instanceof AUCableTask) {
             taskt = "cable";
-        } else if(task instanceof AuUploadTask){
+        } else if (task instanceof AuUploadTask) {
             taskt = "upload";
-        } else if(task instanceof AuDownloadTask){
+        } else if (task instanceof AuDownloadTask) {
             taskt = "download";
         } else {
             throw new Exception("can cast");
@@ -170,7 +186,7 @@ public class AuTaskGenerator {
         return new SeriLocation(x, y, z, uuid);
     }
 
-    public JSONObject castLocationToJson(SeriLocation location){
+    public JSONObject castLocationToJson(SeriLocation location) {
         JSONObject object = new JSONObject();
         object.put("x", String.valueOf(location.x));
         object.put("y", String.valueOf(location.y));

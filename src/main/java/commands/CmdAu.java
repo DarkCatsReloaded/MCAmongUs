@@ -55,9 +55,16 @@ public class CmdAu implements MCCommand {
                     if (gameHandler == null) {
                         sender.sendMessage("§4Es wurde noch kein Spiel erstellt! Es wird nun eines erstellt!");
                         gameHandler = new AUGameHandler(plugin);
-                        sender.sendMessage("§2Das Spiel wurde erstellt und du wurdest hinzugefügt!");
+                        sender.sendMessage("§2Das Spiel wurde erstellt!");
                     }
                     if (args.length > 1) {
+                        if(args[1].equalsIgnoreCase("all")){
+                            for (Player player:Bukkit.getOnlinePlayers()) {
+                                gameHandler.addPlayerToGame(player);
+                            }
+                            sender.sendMessage("§2Spieler hinzugefügt!");
+                            return;
+                        }
                         Player player = Bukkit.getServer().getPlayer(args[1]);
                         if (player == null) {
                             sender.sendMessage("§4Der Spieler wurde nicht gefunden");

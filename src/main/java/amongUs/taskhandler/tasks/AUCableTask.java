@@ -95,7 +95,7 @@ public class AUCableTask implements AUTask {
                         if (done == 4) {
                             plugin.getInventoryListener().seperatedStepHashMap.remove(splayer.getUniqueId());
                             splayer.closeInventory();
-                            player.tasks.remove(task);
+                            player.tasksDone(task);
                             inv.clear();
                             anis.get(splayer.getUniqueId()).stopAnimation();
                             gameHandler.playerDoneWithTask();
