@@ -1,3 +1,17 @@
 name: AmongUsPlugin
 main: core.Plugin
 version: 1.0
+api-version: 1.16
+authors:
+  - MindCollaps
+  - Nomit12312
+  - Miss_CrZy
+  - Coolschrank
+prefix: AmongUs
+commands:
+  au:
+    description: Among Us commands, type /au help for more information
+    usage:  /<command> <faction>
+  autask:
+    description: Setup tasks
+    usage: /<command> <faction>
