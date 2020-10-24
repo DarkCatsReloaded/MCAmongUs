@@ -1,6 +1,7 @@
 package core;
 
 import commands.MCCommand;
+import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,24 +13,23 @@ public class CommandHandler {
     public HashMap<String, MCCommand> commands = new HashMap<>();
 
     public void handleCommand(CommandContainer cmd) {
-        if (commands.containsKey(cmd.invoke.toLowerCase())) {
-            if (cmd.sender instanceof Player) {
-                boolean safe = commands.get(cmd.invoke.toLowerCase()).calledUser(cmd.args, cmd.sender, cmd.command);
-                if (safe) {
-                    commands.get(cmd.invoke).actionUser(cmd.args, cmd.sender, cmd.command);
-                } else {
-                    System.out.println(" [Error]Command cant executet!");
-                }
+        if (cmd.sender instanceof Player) {
+            if (commands.get(cmd.invoke.toLowerCase()).calledPlayer(cmd.args, cmd.sender, cmd.command, cmd.plugin)) {
+                if (cmd.args.length > 0)
+                    if (cmd.args[0].equals("help"))
+                        cmd.sender.sendMessage(commands.get(cmd.invoke).help());
+                    else
+                        commands.get(cmd.invoke).actionPlayer(cmd.args, cmd.sender, cmd.command, cmd.plugin);
             } else {
-                commands.get(cmd.invoke).actionServer(cmd.args, cmd.sender, cmd.command);
+                cmd.sender.sendMessage("§4Du hast nicht die nötige Berechtigung diesen Command auszuführen!");
             }
-        } else {
-            System.out.println(" Command cant found");
+        } else if (cmd.sender instanceof Server) {
+            commands.get(cmd.invoke).actionServer(cmd.args, cmd.sender, cmd.command, cmd.plugin);
         }
     }
 
-    public CommandContainer commandParser(String[] args, CommandSender sender, String invoke, Command command) {
-        return new CommandContainer(args, command, invoke, sender);
+    public CommandContainer commandParser(String[] args, CommandSender sender, String invoke, Command command, Plugin plugin) {
+        return new CommandContainer(args, command, invoke, sender, plugin);
     }
 
     public class CommandContainer {
@@ -38,12 +38,14 @@ public class CommandHandler {
         public Command command;
         public CommandSender sender;
         public String invoke;
+        public Plugin plugin;
 
-        public CommandContainer(String[] arg, Command com, String inv, CommandSender send) {
+        public CommandContainer(String[] arg, Command com, String inv, CommandSender send, Plugin plugin) {
             this.args = arg;
             this.command = com;
             this.invoke = inv;
             this.sender = send;
+            this.plugin = plugin;
         }
     }
 }
