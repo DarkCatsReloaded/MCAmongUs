@@ -1,5 +1,6 @@
 package amongUs;
 
+import amongUs.cosmetics.CosmeticsHandler;
 import amongUs.taskhandler.tasks.AUTask;
 import core.Plugin;
 import org.bukkit.Bukkit;
@@ -22,6 +23,7 @@ public class AUGameHandler {
 
     private Plugin plugin;
 
+    private CosmeticsHandler cosmeticsHandler;
     private AUGameSettings gameSettings = new AUGameSettings();
     private ArrayList<AUPlayer> players = new ArrayList<>();
     private boolean running = false;
@@ -39,7 +41,13 @@ public class AUGameHandler {
         this.plugin = plugin;
     }
 
+    public void setupGame(){
+        cosmeticsHandler = new CosmeticsHandler(plugin);
+        cosmeticsHandler.active(players.get(0).player.getLocation());
+    }
+
     public void startGame() {
+        cosmeticsHandler.inactive();
         impostors = killerScoreboard.registerNewTeam("Impostors");
         impostors.setColor(ChatColor.DARK_RED);
         impostors.setPrefix("Impostor");
@@ -190,6 +198,10 @@ public class AUGameHandler {
 
     public AUGameSettings getGameSettings() {
         return gameSettings;
+    }
+
+    public CosmeticsHandler getCosmeticsHandler() {
+        return cosmeticsHandler;
     }
 
     public class AUGameSettings {

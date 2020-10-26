@@ -36,8 +36,7 @@ public class CmdAu implements MCCommand {
         if (args.length > 0) {
             switch (args[0]) {
                 case "create":
-                    gameHandler = new AUGameHandler(plugin);
-                    gameHandler.addPlayerToGame((Player) sender);
+                    setupGame((Player) sender);
                     sender.sendMessage("§2Das Spiel wurde erstellt und du wurdest hinzugefügt!");
                     break;
 
@@ -54,7 +53,7 @@ public class CmdAu implements MCCommand {
                 case "add":
                     if (gameHandler == null) {
                         sender.sendMessage("§4Es wurde noch kein Spiel erstellt! Es wird nun eines erstellt!");
-                        gameHandler = new AUGameHandler(plugin);
+                        setupGame((Player) sender);
                         sender.sendMessage("§2Das Spiel wurde erstellt!");
                     }
                     if (args.length > 1) {
@@ -122,5 +121,11 @@ public class CmdAu implements MCCommand {
 
     public AUGameHandler getGameHandler() {
         return gameHandler;
+    }
+
+    private void setupGame(Player player){
+        gameHandler = new AUGameHandler(plugin);
+        gameHandler.addPlayerToGame(player);
+        gameHandler.setupGame();
     }
 }

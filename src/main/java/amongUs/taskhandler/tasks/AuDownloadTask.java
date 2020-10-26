@@ -110,8 +110,8 @@ public class AuDownloadTask implements AUTask {
 
     @Override
     public void gameStart(Plugin plugin, AUPlayer player, AUGameHandler gameHandler) {
-        anis.put(player.player.getUniqueId(), new AuTaskAnimationHandler(getLocation().turnIntoLocation(plugin), player.player));
-        anis.get(player.player.getUniqueId()).startAnimation(plugin);
+        anis.put(player.player.getUniqueId(), new AuTaskAnimationHandler(getLocation().turnIntoLocation(plugin)));
+        anis.get(player.player.getUniqueId()).startAnimation(plugin, player.player);
     }
 
     @Override

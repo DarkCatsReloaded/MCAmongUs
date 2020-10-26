@@ -104,8 +104,7 @@ public class AUCableTask implements AUTask {
                 }
             }
         };
-        if (!plugin.getInventoryListener().seperatedStepHashMap.containsKey(player.player.getUniqueId())) {
-            plugin.getInventoryListener().seperatedStepHashMap.put(player.player.getUniqueId(), step);
+        if (plugin.getInventoryListener().addSeperatedStep(step, player.player.getUniqueId())) {
             player.player.openInventory(inv);
         }
     }
@@ -118,8 +117,8 @@ public class AUCableTask implements AUTask {
 
     @Override
     public void gameStart(final Plugin plugin, final AUPlayer player, AUGameHandler gameHandler) {
-        anis.put(player.player.getUniqueId(), new AuTaskAnimationHandler(getLocation().turnIntoLocation(plugin), player.player));
-        anis.get(player.player.getUniqueId()).startAnimation(plugin);
+        anis.put(player.player.getUniqueId(), new AuTaskAnimationHandler(getLocation().turnIntoLocation(plugin)));
+        anis.get(player.player.getUniqueId()).startAnimation(plugin, player.player);
     }
 
     @Override

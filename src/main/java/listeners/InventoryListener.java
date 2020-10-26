@@ -35,4 +35,12 @@ public class InventoryListener implements Listener {
                 }
         }
     }
+
+    public boolean addSeperatedStep(SeperatedStep step, UUID playerUID){
+        if(seperatedStepHashMap.containsKey(playerUID)){
+            seperatedStepHashMap.remove(playerUID);
+        }
+        seperatedStepHashMap.put(playerUID, step);
+        return true;
+    }
 }
