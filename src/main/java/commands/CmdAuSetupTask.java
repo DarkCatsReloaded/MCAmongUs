@@ -45,7 +45,7 @@ public class CmdAuSetupTask implements MCCommand {
                     if (args.length > 1)
                         switch (args[1]) {
                             case "cable":
-                                AUTask tableTask = new AuCableTask();
+                                AUTask tableTask = new AUCableTask();
                                 tableTask.setupTask(new SeriLocation(((Player) sender).getLocation()),"Cable Task");
                                 try {
                                     plugin.getTaskGenerator().addAvailableTask(tableTask, false);

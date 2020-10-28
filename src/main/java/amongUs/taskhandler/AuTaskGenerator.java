@@ -144,7 +144,7 @@ public class AuTaskGenerator {
         AUTask task;
         switch (sw) {
             case "cable":
-                task = new AuCableTask();
+                task = new AUCableTask();
                 break;
 
             case "download":
@@ -177,7 +177,7 @@ public class AuTaskGenerator {
 
     public JSONObject castTaskToJson(AUTask task) throws Exception {
         String taskt;
-        if (task instanceof AuCableTask) {
+        if (task instanceof AUCableTask) {
             taskt = "cable";
         } else if (task instanceof AuUploadTask) {
             taskt = "upload";

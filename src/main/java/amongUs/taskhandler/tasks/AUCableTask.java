@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class AuCableTask implements AUTask {
+public class AUCableTask implements AUTask {
 
     private SeriLocation location;
     private String name;
