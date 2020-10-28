@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="AmongUsMcPlugin" target="7" />
+      <module name="AmongUsMcPlugin" target="8" />
       <module name="MCAmongUs" target="1.5" />
     </bytecodeTargetLevel>
   </component>

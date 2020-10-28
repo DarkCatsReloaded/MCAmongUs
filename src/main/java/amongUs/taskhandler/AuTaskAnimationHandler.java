@@ -4,6 +4,7 @@ import core.Plugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 public class AuTaskAnimationHandler {
@@ -51,7 +52,7 @@ public class AuTaskAnimationHandler {
                 y = c[1];
                 z = c[2];
                 angle = c[3];
-                location.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, new Location(player.getWorld(), x, y, z), 5, 0, 0, 0);
+                location.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, new Location(location.getWorld(), x, y, z), 5, 0, 0, 0);
             }
         }, 0, 1);
     }

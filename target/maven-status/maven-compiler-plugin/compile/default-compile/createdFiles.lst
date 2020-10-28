@@ -8,11 +8,9 @@ amongUs\taskhandler\AuTaskAnimationHandler.class
 core\CommandHandler$CommandContainer.class
 amongUs\taskhandler\tasks\AuDownloadTask$1.class
 amongUs\taskhandler\tasks\AuUploadTask$1$1$1$1.class
-amongUs\taskhandler\tasks\AuCableTask.class
 listeners\HitListener.class
 amongUs\taskhandler\tasks\AuUploadTask$1$1$1$1$1$1.class
 amongUs\taskhandler\tasks\AuDownloadTask$1$1$1$1$1$1$1.class
-amongUs\taskhandler\tasks\AuCableTask$1.class
 amongUs\taskhandler\tasks\AuDownloadTask$1$1$1$1$1.class
 utils\SeperatedStep.class
 amongUs\taskhandler\AuTaskType.class
@@ -24,6 +22,7 @@ utils\SeriLocation.class
 amongUs\taskhandler\tasks\AuUploadTask$1$1$1$1$1.class
 amongUs\taskhandler\tasks\AuButtonTask.class
 amongUs\taskhandler\AuTaskAnimationHandler$1.class
+amongUs\taskhandler\tasks\AUCableTask$1.class
 commands\CmdAuSetupTask.class
 amongUs\AUGameHandler$1.class
 amongUs\cosmetics\CosmeticsHandler.class
@@ -36,6 +35,7 @@ amongUs\AUGameHandler$AUGameSettings.class
 amongUs\taskhandler\tasks\AuUploadTask$1$1$1$1$1$1$1.class
 amongUs\AUGameHandler.class
 commands\TabComplete.class
+amongUs\taskhandler\tasks\AUCableTask.class
 amongUs\AUGameHandler$2.class
 amongUs\taskhandler\AuTaskAnimationHandler$2.class
 amongUs\taskhandler\AuTaskGenerator.class
