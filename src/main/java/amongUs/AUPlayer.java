@@ -36,7 +36,7 @@ public class AUPlayer {
             handler.impostors.addEntry(player.getName());
             killCooldowno = handler.killerScoreboard.registerNewObjective(player.getName() + "tc", "dummy", player.getName());
             killCooldowno.setDisplaySlot(DisplaySlot.SIDEBAR);
-            score = killCooldowno.getScore(player.getName() + "cooldown");
+            score = killCooldowno.getScore(player.getName() + " cooldown");
             score.setScore(killCooldown);
             player.setScoreboard(handler.killerScoreboard);
         } else {
@@ -52,7 +52,9 @@ public class AUPlayer {
 
     public void gameStop(){
         ownTeam.unregister();
+        if(playerType == AmongUsPlayerType.Crewmate)
         taskso.unregister();
+        if(playerType == AmongUsPlayerType.Impostor)
         killCooldowno.unregister();
     }
 

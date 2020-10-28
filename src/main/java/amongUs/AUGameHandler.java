@@ -42,12 +42,13 @@ public class AUGameHandler {
     }
 
     public void setupGame(){
-        cosmeticsHandler = new CosmeticsHandler(plugin);
-        cosmeticsHandler.active(players.get(0).player.getLocation());
+        //TODO: finish
+        //cosmeticsHandler = new CosmeticsHandler(plugin);
+        //cosmeticsHandler.active(players.get(0).player.getLocation());
     }
 
     public void startGame() {
-        cosmeticsHandler.inactive();
+        //cosmeticsHandler.inactive();
         impostors = killerScoreboard.registerNewTeam("Impostors");
         impostors.setColor(ChatColor.DARK_RED);
         impostors.setPrefix("Impostor");

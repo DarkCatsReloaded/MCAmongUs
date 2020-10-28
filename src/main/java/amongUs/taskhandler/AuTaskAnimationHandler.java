@@ -16,7 +16,8 @@ public class AuTaskAnimationHandler {
         this.location = location;
     }
 
-    public void startAnimation(Plugin plugin, Player player) {
+
+    public void startAnimation(Plugin plugin, final Player player) {
         this.player = player;
         aniId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             double x;

@@ -24,6 +24,7 @@ public class SneakListener implements Listener {
             return;
 
         //Cosmetics Location
+        /*
         if(event.isSneaking()){
             Location location = event.getPlayer().getLocation();
             for (AUPlayer p:plugin.getGameHandler().getPlayers()) {
@@ -37,6 +38,7 @@ public class SneakListener implements Listener {
                 }
             }
         }
+        */
 
         //Task listening
         if(event.isSneaking()){
@@ -47,6 +49,7 @@ public class SneakListener implements Listener {
                         try {
                             if(t.getLocation().world.equals(location.getWorld().getUID())){
                                 if(Utils.isNear(t.getLocation().turnIntoLocation(plugin), p.player.getLocation(), 4)){
+                                    System.out.println("Sneak!");
                                     t.playerPerformTask(p,plugin.getGameHandler(),plugin);
                                     return;
                                 }

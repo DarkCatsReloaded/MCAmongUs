@@ -1,8 +1,6 @@
 package commands;
 
-import amongUs.taskhandler.tasks.AUCableTask;
-import amongUs.taskhandler.tasks.AUTask;
-import amongUs.taskhandler.tasks.AuDownloadTask;
+import amongUs.taskhandler.tasks.*;
 import core.Plugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -23,6 +21,8 @@ public class CmdAuSetupTask implements MCCommand {
         tp.crateFurtherTabComplete("add", "cable", false);
         tp.crateFurtherTabComplete("add", "download", false);
         tp.crateFurtherTabComplete("add", "upload", false);
+        tp.crateFurtherTabComplete("add", "button", false);
+        tp.crateFurtherTabComplete("add", "reaktor", false);
     }
 
     @Override
@@ -45,10 +45,36 @@ public class CmdAuSetupTask implements MCCommand {
                     if (args.length > 1)
                         switch (args[1]) {
                             case "cable":
-                                AUTask tableTask = new AUCableTask();
+                                AUTask tableTask = new AuCableTask();
                                 tableTask.setupTask(new SeriLocation(((Player) sender).getLocation()),"Cable Task");
                                 try {
                                     plugin.getTaskGenerator().addAvailableTask(tableTask, false);
+                                } catch (Exception e) {
+                                    sender.sendMessage("§8Der Task ist zu nah an einem anderen Task");
+                                    return;
+                                }
+
+                                sender.sendMessage("§2Did it!");
+                                break;
+
+                            case "button":
+                                AUTask buttonTask = new AuButtonTask();
+                                buttonTask.setupTask(new SeriLocation(((Player) sender).getLocation()),"Press Button Task");
+                                try {
+                                    plugin.getTaskGenerator().addAvailableTask(buttonTask, false);
+                                } catch (Exception e) {
+                                    sender.sendMessage("§8Der Task ist zu nah an einem anderen Task");
+                                    return;
+                                }
+
+                                sender.sendMessage("§2Did it!");
+                                break;
+
+                            case "reaktor":
+                                AUTask reaktorTask = new AuReaktorRestartTask();
+                                reaktorTask.setupTask(new SeriLocation(((Player) sender).getLocation()),"Reaktor Restart Task");
+                                try {
+                                    plugin.getTaskGenerator().addAvailableTask(reaktorTask, false);
                                 } catch (Exception e) {
                                     sender.sendMessage("§8Der Task ist zu nah an einem anderen Task");
                                     return;

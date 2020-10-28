@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class AUCableTask implements AUTask {
+public class AuCableTask implements AUTask {
 
     private SeriLocation location;
     private String name;
@@ -43,7 +43,6 @@ public class AUCableTask implements AUTask {
     @Override
     public void playerPerformTask(final AUPlayer player, final AUGameHandler gameHandler, final Plugin plugin) {
         final Inventory inv = Bukkit.createInventory(null, 9 * 4, "Fix Cables");
-        Material type;
         ArrayList<ItemStack> itsL = getCableWool("cable");
         ArrayList<ItemStack> itsR = getCableWool("connector");
 

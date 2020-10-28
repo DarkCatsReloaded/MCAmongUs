@@ -1,9 +1,6 @@
 package amongUs.taskhandler;
 
-import amongUs.taskhandler.tasks.AUCableTask;
-import amongUs.taskhandler.tasks.AUTask;
-import amongUs.taskhandler.tasks.AuDownloadTask;
-import amongUs.taskhandler.tasks.AuUploadTask;
+import amongUs.taskhandler.tasks.*;
 import core.Plugin;
 import org.bukkit.entity.Player;
 import org.json.simple.JSONArray;
@@ -57,7 +54,15 @@ public class AuTaskGenerator {
         for (int i = 0; i < amount; i++) {
             if (available.size() == 0)
                 break;
-            AUTask task = available.get(ThreadLocalRandom.current().nextInt(0, available.size() - 1));
+
+            AUTask task = null;
+            if(available.size() >1)
+            task = available.get(ThreadLocalRandom.current().nextInt(0, available.size() - 1));
+            else if ( available.size() == 0)
+                break;
+            else
+                task = available.get(0);
+
             ts.add(task);
             available.remove(task);
         }
@@ -105,6 +110,7 @@ public class AuTaskGenerator {
             JSONObject t = (JSONObject) obj;
             tasksAvailable.add(castJsonToTask(t));
         }
+        System.out.println("Loaded " + tasksAvailable.size() + " tasks from server!");
     }
 
     public void saveTasks() {
@@ -130,6 +136,7 @@ public class AuTaskGenerator {
             arr.add(task);
         }
         plugin.getFileUtils().saveJsonFile(plugin.getFileUtils().home + path, object);
+        System.out.println("Saved " + tasksAvailable.size() + " tasks from server!");
     }
 
     public AUTask castJsonToTask(JSONObject o) throws Exception {
@@ -137,7 +144,7 @@ public class AuTaskGenerator {
         AUTask task;
         switch (sw) {
             case "cable":
-                task = new AUCableTask();
+                task = new AuCableTask();
                 break;
 
             case "download":
@@ -146,6 +153,14 @@ public class AuTaskGenerator {
 
             case "upload":
                 task = new AuUploadTask();
+                break;
+
+            case "button":
+                task = new AuButtonTask();
+                break;
+
+            case "reaktor":
+                task = new AuReaktorRestartTask();
                 break;
 
             default:
@@ -162,14 +177,18 @@ public class AuTaskGenerator {
 
     public JSONObject castTaskToJson(AUTask task) throws Exception {
         String taskt;
-        if (task instanceof AUCableTask) {
+        if (task instanceof AuCableTask) {
             taskt = "cable";
         } else if (task instanceof AuUploadTask) {
             taskt = "upload";
         } else if (task instanceof AuDownloadTask) {
             taskt = "download";
+        } else if (task instanceof AuButtonTask) {
+            taskt = "button";
+        } else if(task instanceof AuReaktorRestartTask){
+          taskt = "reaktor";
         } else {
-            throw new Exception("can cast");
+            throw new Exception("cant cast");
         }
         JSONObject o = new JSONObject();
         o.put("taskt", taskt);

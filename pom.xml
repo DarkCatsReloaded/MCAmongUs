@@ -34,10 +34,28 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
+<<<<<<< Updated upstream
                     <source>8</source>
                     <target>8</target>
+=======
+                    <source>7</source>
+                    <target>7</target>
+>>>>>>> Stashed changes
                 </configuration>
             </plugin>
         </plugins>

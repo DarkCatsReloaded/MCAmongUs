@@ -21,7 +21,7 @@ public class CosmeticsHandler {
         this.plugin = plugin;
     }
 
-    public void handleCosmetic(Plugin plugin, AUGameHandler gameHandler, AUPlayer player){
+    public void handleCosmetic(Plugin plugin, AUGameHandler gameHandler, final AUPlayer player){
         Inventory inv = Bukkit.createInventory(null, 9*5);
         ItemStack red = new ItemStack(Material.RED_WOOL);
         inv.setItem(invLocation(2, 2), red);
