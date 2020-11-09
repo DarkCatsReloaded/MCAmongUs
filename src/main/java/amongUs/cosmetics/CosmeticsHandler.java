@@ -59,6 +59,7 @@ public class CosmeticsHandler {
             }
         };
     plugin.getInventoryListener().unremovableItemsInventory.put(player.player.getUniqueId(),inv);
+    plugin.getInventoryListener().addSeperatedStep(redListener, player.player.getUniqueId());
 
         player.player.openInventory(inv);
     }
