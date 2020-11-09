@@ -23,8 +23,8 @@ public class SneakListener implements Listener {
         if(plugin.getGameHandler() == null)
             return;
 
-        //Cosmetics Location
-        /*
+      //  Cosmetics Location
+
         if(event.isSneaking()){
             Location location = event.getPlayer().getLocation();
             for (AUPlayer p:plugin.getGameHandler().getPlayers()) {
@@ -38,7 +38,7 @@ public class SneakListener implements Listener {
                 }
             }
         }
-        */
+
 
         //Task listening
         if(event.isSneaking()){

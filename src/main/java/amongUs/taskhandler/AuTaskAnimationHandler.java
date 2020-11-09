@@ -33,7 +33,7 @@ public class AuTaskAnimationHandler {
                 y = c[1];
                 z = c[2];
                 angle = c[3];
-                player.spawnParticle(Particle.VILLAGER_HAPPY, new Location(player.getWorld(), x, y, z), 5, 0, 0, 0);
+                player.spawnParticle(Particle.VILLAGER_HAPPY, new Location(location.getWorld(), x, y, z), 5, 0, 0, 0);
             }
         }, 0, 1);
     }
@@ -52,7 +52,9 @@ public class AuTaskAnimationHandler {
                 y = c[1];
                 z = c[2];
                 angle = c[3];
+
                 location.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, new Location(location.getWorld(), x, y, z), 5, 0, 0, 0);
+
             }
         }, 0, 1);
     }
