@@ -7,6 +7,7 @@ import core.Plugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import utils.SeperatedStep;
@@ -53,9 +54,19 @@ public class CosmeticsHandler {
             @Override
             public void itemInventoryEvent(ItemStack itemStack) {
                 if (itemStack.getType()== Material.RED_WOOL) {
-                    player.player.setCustomName("RED");
+                    changeNmame(player.player, "RED");
                     player.player.sendMessage("you clicked se red one :D");
                 }
+                if (itemStack.getType()== Material.BLUE_WOOL) {
+                    changeNmame(player.player, "BLUE");
+                    player.player.sendMessage("you clicked se blue one :D");
+                }
+                if (itemStack.getType()== Material.GREEN_WOOL) {
+                    changeNmame(player.player, "GREEN");
+                    player.player.sendMessage("you clicked se GREEN one :D");
+                }
+                plugin.getInventoryListener().seperatedStepHashMap.remove(player.player.getUniqueId());
+                player.player.closeInventory();
             }
         };
     plugin.getInventoryListener().unremovableItemsInventory.put(player.player.getUniqueId(),inv);
@@ -64,6 +75,12 @@ public class CosmeticsHandler {
         player.player.openInventory(inv);
     }
 
+    private void changeNmame(Player player, String name){
+        player.setDisplayName(name);
+        player.setCustomName(name);
+        player.setPlayerListName(name);
+        player.setCustomNameVisible(true);
+    }
     public void active(Location location){
         cosmeticLocation = location;
         ani = new AuTaskAnimationHandler(location);
