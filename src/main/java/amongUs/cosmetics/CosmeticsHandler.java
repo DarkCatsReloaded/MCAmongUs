@@ -36,6 +36,7 @@ public class CosmeticsHandler {
         ItemStack purpel = new ItemStack(Material.PURPLE_WOOL);
 
 
+
         inv.setItem(invLocation(2, 2), red);
         inv.setItem(invLocation(2, 4), blue);
         inv.setItem(invLocation(2, 6), green);
